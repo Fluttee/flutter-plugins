@@ -21,6 +21,10 @@ bool FlutterWindow::OnCreate() {
   // Avoid Windows fullscreen freezes in recent Flutter engines when
   // window_manager changes styles from a platform-channel call.
   project.set_ui_thread_policy(flutter::UIThreadPolicy::RunOnSeparateThread);
+  // Skia, to match an app whose own engine opts out of Impeller in
+  // windows/runner/main.cpp. One engine on Impeller next to one on Skia
+  // crashed the app as this engine started (Flutter 3.50, Windows).
+  project.set_impeller_switch(flutter::ImpellerSwitch::Disabled);
   std::vector<std::string> entrypoint_args = {"multi_window", id_,
                                               window_argument_};
   project.set_dart_entrypoint_arguments(entrypoint_args);
